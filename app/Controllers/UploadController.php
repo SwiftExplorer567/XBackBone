@@ -202,12 +202,13 @@ class UploadController extends Controller
 
         $this->storage->writeStream($storagePath, $file->getStream()->detach());
 
-        $this->database->query('INSERT INTO `uploads`(`user_id`, `code`, `filename`, `storage_path`, `published`) VALUES (?, ?, ?, ?, ?)', [
+        $this->database->query('INSERT INTO `uploads`(`user_id`, `code`, `filename`, `storage_path`, `published`, `timestamp`) VALUES (?, ?, ?, ?, ?, ?)', [
             $user->id,
             $code,
             $file->getClientFilename(),
             $storagePath,
             $user->hide_uploads == '1' ? 0 : 1,
+            date('Y-m-d H:i:s'),
         ]);
         $mediaId = $this->database->getPdo()->lastInsertId();
 
